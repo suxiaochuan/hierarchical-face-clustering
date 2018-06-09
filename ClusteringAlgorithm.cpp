@@ -71,11 +71,19 @@ std::vector<std::vector<int>> ClusteringAlgorithm::Cluster(const std::string &in
       if (valid.count(neighbor) && neighbor != nd_id1) {
         new_neighborhood.push_back(neighbor);
         dual_adjacency_list[neighbor].push_back(new_id);
+
+        double new_cost = EvaluateCost(dual_nodes[nd_id0], dual_nodes[neighbor]);
+        pq.push({-new_cost, static_cast<int>(dual_edges.size())});
+        dual_edges.emplace_back(neighbor, new_id);
       }
     for (int neighbor : dual_adjacency_list[nd_id1])
       if (valid.count(neighbor) && neighbor != nd_id0) {
         new_neighborhood.push_back(neighbor);
         dual_adjacency_list[neighbor].push_back(new_id);
+
+        double new_cost = EvaluateCost(dual_nodes[nd_id1], dual_nodes[neighbor]);
+        pq.push({-new_cost, static_cast<int>(dual_edges.size())});
+        dual_edges.emplace_back(neighbor, new_id);
       }
     dual_adjacency_list.push_back(new_neighborhood);
 
